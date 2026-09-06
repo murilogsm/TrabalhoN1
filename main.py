@@ -7,88 +7,73 @@ class No:
 
 class ListaDuplamenteLigada:
     def __init__(self):
-        self.inicio = None
-        self.fim = None
+        self.primeiro = None
+        self.ultimo = None
 
     def Imprimir(self):
-        if self.inicio == None:
-            print("lista vazia")
-            return
-        atual = self.inicio
-        texto = ""
-        while atual != None:
-            texto = texto + str(atual.valor) + " "
-            atual = atual.proximo
-        print(texto)
-
-    def InserirFinal(self, valor):
-        novo = No(valor)
-        if self.inicio == None:
-            self.inicio = novo
-            self.fim = novo
-        else:
-            novo.anterior = self.fim
-            self.fim.proximo = novo
-            self.fim = novo
+        n = self.primeiro
+        while n:
+            print(n.valor, end=" ")
+            n = n.proximo
+        print()
 
     def InserirInicio(self, valor):
         novo = No(valor)
-        if self.inicio == None:
-            self.inicio = novo
-            self.fim = novo
+        novo.proximo = self.primeiro
+        if self.primeiro:
+            self.primeiro.anterior = novo
         else:
-            novo.proximo = self.inicio
-            self.inicio.anterior = novo
-            self.inicio = novo
+            self.ultimo = novo
+        self.primeiro = novo
+
+    def InserirFinal(self, valor):
+        novo = No(valor)
+        novo.anterior = self.ultimo
+        if self.ultimo:
+            self.ultimo.proximo = novo
+        else:
+            self.primeiro = novo
+        self.ultimo = novo
 
     def InserirMeio(self, valor, posicao):
-        if self.inicio == None:
-            self.InserirFinal(valor)
-            return
-        atual = self.inicio
-        contador = 0
-        while contador < posicao and atual.proximo != None:
-            atual = atual.proximo
-            contador = contador + 1
-        if atual == self.fim:
+        n = self.primeiro
+        for i in range(posicao - 1):
+            if n:
+                n = n.proximo
+        if not n or not n.proximo:
             self.InserirFinal(valor)
             return
         novo = No(valor)
-        depois = atual.proximo
-        novo.anterior = atual
-        novo.proximo = depois
-        atual.proximo = novo
-        depois.anterior = novo
+        novo.anterior = n
+        novo.proximo = n.proximo
+        n.proximo.anterior = novo
+        n.proximo = novo
 
     def RemoverInicio(self):
-        if self.inicio == None:
-            print("lista vazia")
+        if not self.primeiro:
             return
-        if self.inicio == self.fim:
-            self.inicio = None
-            self.fim = None
-            return
-        self.inicio = self.inicio.proximo
-        self.inicio.anterior = None
+        self.primeiro = self.primeiro.proximo
+        if self.primeiro:
+            self.primeiro.anterior = None
+        else:
+            self.ultimo = None
 
     def RemoverFinal(self):
-        if self.fim == None:
-            print("lista vazia")
+        if not self.ultimo:
             return
-        if self.inicio == self.fim:
-            self.inicio = None
-            self.fim = None
-            return
-        self.fim = self.fim.anterior
-        self.fim.proximo = None
+        self.ultimo = self.ultimo.anterior
+        if self.ultimo:
+            self.ultimo.proximo = None
+        else:
+            self.primeiro = None
 
 
 lista = ListaDuplamenteLigada()
-lista.InserirFinal(10)
-lista.InserirFinal(20)
-lista.InserirFinal(30)
-lista.InserirInicio(5)
-lista.InserirMeio(99, 1)
+lista.InserirFinal(7)
+lista.InserirFinal(14)
+lista.InserirFinal(21)
+lista.InserirInicio(3)
+lista.InserirMeio(50, 2)
 lista.Imprimir()
 lista.RemoverInicio()
 lista.RemoverFinal()
